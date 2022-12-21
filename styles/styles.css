@@ -456,10 +456,10 @@ main .section-middle .bg-progress-bar .fg-progress-bar {
   width: 155px;
   height: 3rem;
 }
-.section-bottom .option#out-of-stock, .modal-content .option#out-of-stock {
+.section-bottom .option.out-of-stock, .modal-content .option.out-of-stock {
   opacity: 0.5;
 }
-.section-bottom .option#out-of-stock .button, .modal-content .option#out-of-stock .button {
+.section-bottom .option.out-of-stock .button, .modal-content .option.out-of-stock .button {
   background-color: hsl(0deg, 0%, 48%);
   cursor: not-allowed;
 }
