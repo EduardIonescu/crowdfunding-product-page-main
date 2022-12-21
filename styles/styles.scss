@@ -1,0 +1,765 @@
+@import url('https://fonts.googleapis.com/css2?family=Commissioner:wght@400;500;700&display=swap');
+
+// FONTS
+
+$font-family-commissioner: 'Commissioner', sans-serif;
+$font-weight-regular:400;
+$font-weight-medium:500;
+$font-weight-bold:700;
+$font-size-body: 16px;
+
+// COLORS
+$moderate-cyan: hsl(176, 50%, 47%);
+$dark-cyan: hsl(176, 72%, 28%);
+
+$black: hsl(0, 0%, 0%);
+$dark-gray: hsl(0, 0%, 48%);
+
+
+*,*::after,*::before{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family:$font-family-commissioner;
+}
+
+.hidden{
+    display: none;
+}
+
+body{
+    display: flex;
+    justify-content: center;
+    background-color: rgb(240, 240, 240);
+    
+}
+
+// Mobile
+@media (max-width:800px){
+    .desktop{
+        display: none!important;
+    }
+    header{
+        width: 375px;
+        padding: 2rem 1.5rem;
+
+        nav{
+            .slider-inactive{
+                display: none;
+            }
+            .slider-active{
+                display: block!important;
+                position: absolute;
+                background-color:white;
+                top:3.45rem;
+                width:325px;
+                border-radius:6px;
+                z-index:999;
+    
+                li{
+                    padding:1.5rem;
+                    font-size:18px;
+    
+                    a{
+                        color:inherit;
+                    }
+                }
+                hr{
+                    opacity:0.2;
+                }
+            }
+        }
+    }
+
+    .modal-content{
+        width: 325px;
+
+        .modal-header{
+
+            .modal-title{
+                font-size:20px;
+            }
+        }
+        .top-container{
+            margin-bottom:2rem;
+            align-items: center;
+        }
+        .titles{
+            flex-direction: column;
+            gap:0.4rem;
+
+            .title-black, .title-cyan{
+                font-size:14px;
+            }
+        }
+        .description{
+            margin-bottom:1.8rem;
+        }
+        .option.focused{
+            .pledge-form{
+                display: block;
+                
+                hr{
+                    width:273px;
+                }
+                .pledge-container{
+                    margin-top:1rem;
+                }
+            }
+        }   
+    }
+    
+    #modal-thanks{
+        h4{
+            font-size:18px;
+            margin:2rem 0;
+        }
+        .button{
+            margin-bottom:2.5rem;
+        }
+    }
+
+    .description{
+        font-size:14px;
+    }
+    
+    main{
+        width:375px;
+        section{
+            width:325px;
+        }
+        .section-top{
+            margin-top:15.3rem;
+
+            #logo-mastercraft{
+                left:135px;
+            }
+            .title{
+                font-size:20px;
+            }
+            .buttons-container{
+                gap:0.5rem;
+            }
+            .button{
+                width:212px;
+            }
+            button.bookmark{
+                background-color: transparent;
+            }
+        }
+
+        .section-middle{
+            padding:2.3rem 1.3rem;
+
+            hr{
+                margin:auto;
+                margin-bottom:1.5rem;
+            }
+            .bg-progress-bar{
+                margin-top:1.9rem;
+            }
+        }
+    }
+    .section-bottom, .modal-content{
+        padding:2rem 1.4rem 1rem 1.4rem;
+        .option{
+            padding:1.5rem;
+
+            .title, .price{
+                font-size:14px;
+            }
+            .price{
+                margin-bottom:1.5rem;
+            }
+            .button{
+                margin-top:1.5rem;
+            }
+        }
+    }
+}
+
+.darken{
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 0;
+    width: 0;
+    z-index: -1;
+}
+.darken-active{
+    display: block!important;
+    height: 100%;
+    width: 100%;
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 30%);
+}
+
+header{
+    position: absolute;
+    z-index:10;
+
+    #navbar{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        z-index:1;
+        position: relative;
+
+        #burger-menu, #close-menu{
+            display: block;
+            cursor:pointer;
+            z-index:100;
+        }
+        .hidden{
+            display: none!important;
+        }
+        li{
+            list-style-type: none;
+            font-weight: $font-weight-medium;
+            color:$black;
+
+            a{
+                text-decoration: none;
+            }
+        }
+    }
+}
+
+.bg-not-scrollable{
+    overflow-y: hidden;
+}
+
+// Not form not visible unless radio button is checked
+.pledge-form{
+    display: none;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 100; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+
+    .modal-content {
+        position: relative;
+        background-color: #fefefe;
+        margin: auto;
+        border: 1px solid #888;
+        border-radius:0.5rem;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+        -webkit-animation-name: animatetop;
+        -webkit-animation-duration: 0.4s;
+        animation-name: animatetop;
+        animation-duration: 0.4s;
+        margin-bottom:8rem;
+        .option.focused{
+            border:2px solid $moderate-cyan!important;
+
+            .pledge-form{
+                text-align: center;
+
+                hr{
+                    margin-left:-1.5rem;
+                    opacity:0.3;
+                    margin-top:1.4rem;
+                    margin-bottom:1.5rem;
+                }
+                .pledge-container{
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+
+                    .pledge-amount{
+                        height:3rem;
+                        width:100px;
+                        border-radius:2rem;
+                        border:1px solid lightgray;
+                        display: flex;
+                        align-items: center;
+                        padding-left:1.3rem;
+                        color:$dark-gray;
+                        
+
+                        .pledge-input{
+                            width: 50px;
+                            height:44px;
+                            border:none;
+                            margin-left:0.5rem;
+                            font-weight: $font-weight-bold;
+                            font-size:14px;
+                            
+                        }
+                        .pledge-input:focus{
+                            outline:none;
+                        }
+                        .pledge-input::-webkit-outer-spin-button,
+                        .pledge-input::-webkit-inner-spin-button{
+                            appearance: none;
+                        }
+                    }
+                    .pledge-amount:focus-within{
+                        border-color:$moderate-cyan;
+                    }
+                    
+                    button{
+                        margin: 0;
+                        width:112px;
+                        
+                    }
+                }  
+            }
+        }
+
+        .modal-header{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom:1.8rem;
+
+            #close-modal{
+                cursor:pointer;
+            }
+        }
+        
+        .no-bottom{
+            margin-bottom:0;
+        }
+        
+        .top-container{
+            display: flex;
+            gap: 1rem;
+
+            // Completely change radio buttons
+            input[type=radio] {
+                appearance: none;
+                width: 25px;
+                height: 25px;
+                border: 1px solid rgb(219, 219, 219);
+                border-radius: 50%;
+                background-clip: content-box;
+                padding: 5px;
+                cursor:pointer;
+            }
+            input[type=radio]:checked {
+                background-color: $moderate-cyan;
+            }
+            .titles{
+                display: flex;
+                
+                .title-cyan{
+                    color:$moderate-cyan;
+                }
+            }
+        }
+        .places-left{
+            .big{
+                font-size:20px!important;
+            }
+        }
+        #unselectable{
+            cursor:not-allowed;
+        }
+    }
+  }
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0} 
+    to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+
+#modal-thanks{
+    text-align: center;
+
+    .button{
+        width:105px;
+        height:3rem;
+    }
+}
+
+.description{
+    color:$dark-gray;
+    font-weight:400;
+}
+.button{
+    background-color: $moderate-cyan;
+    color:white;
+    font-weight:$font-weight-bold;
+    border:none;
+    border-radius:2rem;
+    font-size:$font-size-body;
+    cursor:pointer;
+}
+
+main{
+
+    min-height:100vh;
+    position: relative;
+
+    article .image-hero{
+        width:100%;
+        position: absolute;
+        z-index:-9;
+    }
+
+    section{
+        margin:24px auto;
+        border-radius:6px;
+        background-color: white;
+    }
+
+    .section-top{
+        padding:2.5rem 1.5rem;
+        position: relative;
+
+        #logo-mastercraft{
+            position: absolute;
+            top:-28px;
+        }
+        .title{
+            padding: 0.7rem 0.5rem 1.1rem 0.5rem;
+        }
+        .description{
+            padding-bottom:1.5rem;
+        }
+        .buttons-container{
+            display: flex;
+            align-items: center;
+        }
+        .button{
+            height:3.5rem;
+        }
+        button.bookmark{
+            border:none;
+            cursor: pointer;
+        }
+    }
+
+    .section-top, .section-middle{
+        text-align: center;
+    }
+
+    .section-middle{
+
+        .bold-number{
+            font-size:32px;
+        }
+        .description{
+            margin-top:0.5rem;
+            margin-bottom:1.5rem;
+            font-weight: $font-weight-regular;
+        }
+        hr{
+            width:5rem;
+            opacity:0.4;
+        }
+        .bg-progress-bar{
+            width:100%;
+            height:12px;
+            background-color:rgb(233, 233, 233);
+            border-radius:6px;
+            
+            .fg-progress-bar{
+                width:89.914%;
+                max-width:100%;
+                background-color:$moderate-cyan;
+                height:12px;
+                border-radius:6px;
+            }
+        }
+    }
+}
+
+.section-bottom, .modal-content{
+    
+    .title{
+        margin-bottom:1.7rem;
+    }
+    .description{
+        font-weight:$font-weight-medium;
+        margin-bottom:2rem;
+        line-height:1.5rem;
+    }
+
+    .option{
+        border:1px solid;
+        border-color:lightgray;
+        border-radius:0.4rem;
+        margin-bottom:1.5rem;
+
+        .title{
+            margin-bottom:0.5rem;
+        }
+        .price{
+            font-weight:$font-weight-medium;
+            color:$moderate-cyan;
+        }
+        .places-left{
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+
+            .big{
+                font-weight:$font-weight-bold;
+                font-size:32px;
+            }
+        }
+        .button{
+            width:155px;
+            height:3rem;
+        }
+    }
+
+    .option#out-of-stock{
+        opacity:0.5;
+
+        .button{
+            background-color: $dark-gray;
+            cursor:not-allowed;
+        }
+    }
+}
+
+// Desktop 
+@media(min-width:801px){
+    .mobile{
+        display: none!important;
+    }
+    header{
+        width: 100%;
+        padding: 2.5rem 10rem;
+        nav{
+            .desktop-nav-right{
+                display: flex;   
+                gap:2rem;
+
+                li{
+                    font-size:$font-size-body;
+                }
+                a{
+                    color:rgb(247, 247, 247);
+                    transition:all 0.2s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+                }
+                a:hover{
+                    color:$moderate-cyan;
+                }
+            }
+        }
+    }
+
+    .description{
+        font-size:$font-size-body;
+    }
+
+    .button{
+        transition: all 0.25s ease-out;
+    }
+    .button:hover{
+        background-color: $dark-cyan;
+    }
+
+    .modal{
+        .modal-content{
+            width:730px;
+            left:8px;
+            padding:3rem 3rem 2rem 3rem;
+
+            .modal-title{
+                font-size:24px;
+            }
+            .option{
+                padding: 2rem 1.5rem;
+
+                .top-container{
+                    align-items:flex-start;
+                    margin-bottom:1rem;
+
+                    input[type=radio]{
+                        margin-top:3px;
+                    }
+                    .desktop-right-side{
+                        display: flex;
+                        justify-content: space-between;
+                        width:100%;
+                    }
+                    .titles{
+                        flex-direction: row;
+                        gap:1rem;
+                        align-items: center;
+
+                        .title-black, .title-cyan{
+                            font-size: $font-size-body;
+                            font-weight:$font-weight-bold;
+                        }
+                        .is-clickable{
+                            transition: color 0.25s ease-out;
+                            cursor:pointer;
+                        }
+                        .is-clickable:hover{
+                            color:$moderate-cyan;
+                        }
+                    }
+                }
+                .description{
+                    margin-left:2.5rem;
+                    font-weight:$font-weight-regular!important;
+                    font-size:15px;
+                    margin-bottom:0;
+                }  
+            }
+            .option.focused{
+                .pledge-form{
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: center;
+                    justify-content: space-between;
+                    hr{
+                        width:700px;
+                        margin-right:-1.5rem;
+                    }
+                    .description{
+                        margin-left:0;
+                    }
+                    .pledge-container{
+                        gap:1rem;
+
+                        .pledge-amount, .pledge-input{
+                            cursor:pointer;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    #modal-thanks{
+        .modal-content{
+            width:540px;
+            margin-top:150px;
+        }
+        img{
+            width: 90px;
+        }
+        h4{
+            font-size:24px;
+            margin:2.5rem 0 1.5rem 0;
+        }
+        .description{
+            line-height: 2Srem;
+        }
+        .button{
+            margin-bottom:1.2rem;
+        }
+    }
+
+    main{
+        width:100%;
+
+        article .image-hero{
+            height:400px;
+            object-fit: cover;
+        }
+
+        section{
+            width:730px;
+        }
+        .section-top{
+            margin-top:19rem;
+            padding-left:3rem;
+            padding-right:3rem;
+
+            #logo-mastercraft{
+                left: 337px;
+            }
+            .title{
+                font-size:28px;
+            }
+            .buttons-container{
+                justify-content: space-between;
+                margin-top:1rem;
+            }
+            .button{
+                width:200px;
+            }
+            .bookmark{
+                display: flex;
+                align-items: center;
+                gap:1rem;
+                background-color: rgb(243, 243, 243);
+                border-radius:2rem;
+                padding-right:1.5rem;
+                transition: all 0.25s ease-out;
+                
+                #bookmark-text{
+                    font-weight: $font-weight-bold;
+                    color:$dark-gray;
+                    font-size:$font-size-body;
+                }
+            }
+        }
+
+        .section-middle{
+            padding: 2.8rem 3rem;
+            
+            .section-middle-top-container{
+                display: flex;
+                align-items: center;
+
+                .number-container{
+                    text-align: left;
+                }
+                hr{
+                    transform:rotate(90deg);
+                    margin: 2.2rem 1.5rem auto 1.5rem;
+                    width:4rem;
+                }
+                
+            }
+            .bg-progress-bar{
+                margin-top:1rem;
+            }
+        }
+
+        .section-bottom{
+           padding:3rem; 
+
+           .title{
+            font-size:130%;
+           }
+
+           .option{
+                padding:2.5rem 2rem 2rem 2rem;
+
+                .top-container, .bottom-container{
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+                .top-container{
+                    margin-bottom:1.5rem;
+
+                    .title {
+                        font-size:18px;
+                    }
+                    .price{
+                        font-size:$font-size-body;
+                    }
+                }
+           }
+        }
+    }
+}
